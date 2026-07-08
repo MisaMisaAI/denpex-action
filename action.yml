@@ -1,0 +1,16 @@
+name: 'Diagnose with Denpex'
+description: 'Automatically analyzes failed ML training jobs and outputs root cause, confidence, and recommended fixes.'
+author: 'Denpex'
+branding:
+  icon: 'activity'
+  color: 'red'
+
+inputs:
+  api-key:
+    description: 'Your Denpex API Key (leave empty for test drive mode)'
+    required: false
+    default: ''
+
+runs:
+  using: 'node20'
+  main: 'diagnose.js'
