@@ -23,7 +23,7 @@ jobs:
         
       # 👇 Add Denpex at the end to catch crashes
       - name: Diagnose with Denpex
-        uses: MisaMisaAI/denpex-github-action@main
+        uses: MisaMisaAI/denpex-action@main
         if: failure()
         with:
           # Optional: Use your API key to route alerts to your Slack/PagerDuty
