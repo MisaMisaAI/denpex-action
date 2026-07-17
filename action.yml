@@ -10,6 +10,10 @@ inputs:
     description: 'Your Denpex API Key (leave empty for test drive mode)'
     required: false
     default: ''
+  logs-file:
+    description: 'Path (relative to the workspace) of the training log to diagnose'
+    required: false
+    default: 'training.log'
 
 runs:
   using: 'node20'

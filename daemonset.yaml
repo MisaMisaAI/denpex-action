@@ -1,3 +1,12 @@
+# Denpex node monitor — DaemonSet
+# Runs on every node (incl. GPU-tainted ones), tails kernel/system logs for Xid /
+# ECC / driver faults, and ships findings to Denpex for diagnosis + alert routing.
+#
+# Zero build required: runs on the public python:3.12-slim image and fetches the
+# (stdlib-only) daemon script from denpex.com at startup — no private registry.
+#
+#   1. Replace YOUR_DENPEX_API_KEY_HERE below (key: denpex.com dashboard -> API Keys)
+#   2. kubectl apply -f https://denpex.com/agent/daemonset.yaml
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
@@ -21,8 +30,18 @@ spec:
         effect: "NoSchedule"
       containers:
       - name: denpex-daemon
-        image: your-registry.com/denpex-daemon:latest
-        imagePullPolicy: Always
+        image: python:3.12-slim
+        imagePullPolicy: IfNotPresent
+        command: ["/bin/sh", "-c"]
+        args:
+          - |
+            python -c "import urllib.request as u; u.urlretrieve('https://denpex.com/agent/kubernetes/denpex-daemon.py', '/tmp/denpex-daemon.py')" && exec python /tmp/denpex-daemon.py
+        resources:
+          requests:
+            cpu: 25m
+            memory: 64Mi
+          limits:
+            memory: 128Mi
         env:
         - name: NODE_NAME
           valueFrom:
